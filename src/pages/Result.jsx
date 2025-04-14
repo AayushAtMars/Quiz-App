@@ -38,7 +38,7 @@ const Result = () => {
         </div>
 
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/topic")}
           className="mt-6 bg-indigo-600 text-white px-4 py-2 rounded"
         >
           Retake Quiz
