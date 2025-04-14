@@ -19,6 +19,9 @@ const Quiz = () => {
       return;
     }
     const { topic, questionCount } = quizConfig;
+    // Reset score and answers when starting a new quiz
+    setScore(0);
+    setAnswers([]);
     getMCQs(topic, questionCount).then((data) => {
       setQuestions(data);
       setLoading(false);
@@ -51,10 +54,9 @@ const Quiz = () => {
   }, [currentQ, questions]);
 
   const handleNext = () => {
-    setAnswers((prev) => [
-      ...prev,
-      selected === questions[currentQ]?.answer ? 1 : 0,
-    ]);
+    // Compare the selected answer with the correct answer (case-insensitive)
+    const isCorrect = selected?.toLowerCase().trim() === questions[currentQ]?.answer.toLowerCase().trim();
+    setAnswers((prev) => [...prev, isCorrect ? 1 : 0]);
 
     setSelected(null);
     setTimer(60);
@@ -69,10 +71,9 @@ const Quiz = () => {
   const finishQuiz = () => {
     if (!questions || !questions[currentQ]) return;
 
-    const updatedAnswers = [
-      ...answers,
-      selected === questions[currentQ].answer ? 1 : 0,
-    ];
+    // Compare the selected answer with the correct answer (case-insensitive)
+    const isCorrect = selected?.toLowerCase().trim() === questions[currentQ]?.answer.toLowerCase().trim();
+    const updatedAnswers = [...answers, isCorrect ? 1 : 0];
     setAnswers(updatedAnswers);
 
     const totalScore = updatedAnswers.reduce((acc, val) => acc + val, 0);
