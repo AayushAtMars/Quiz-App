@@ -30,8 +30,8 @@ const Home = () => {
     }
 
     setUser(form);
-    toast.success("User info saved! Starting quiz...");
-    navigate("/quiz");
+    toast.success("User info saved! Choose your quiz topic...");
+    navigate("/topic");
   };
 
   return (
@@ -81,7 +81,7 @@ const Home = () => {
           type="submit"
           className="w-full bg-slate-600 hover:bg-slate-700 text-white py-2 rounded transition-all"
         >
-          Start Quiz
+          Next
         </button>
       </form>
     </div>

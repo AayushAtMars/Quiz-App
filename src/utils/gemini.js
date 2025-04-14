@@ -1,6 +1,6 @@
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
-export const getMCQs = async () => {
+export const getMCQs = async (topic, questionCount) => {
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
     {
@@ -12,7 +12,7 @@ export const getMCQs = async () => {
             parts: [
               {
                 text: `
-Generate 5 multiple choice questions in this exact JSON format:
+Generate ${questionCount} multiple choice questions about ${topic} in this exact JSON format:
 [
   {
     "question": "What is the capital of France?",

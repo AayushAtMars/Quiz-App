@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Quiz = () => {
-  const { setQuestions, setAnswers, setScore, questions, answers } = useQuiz();
+  const { setQuestions, setAnswers, setScore, questions, answers, quizConfig } = useQuiz();
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState(null);
   const [timer, setTimer] = useState(60);
@@ -14,7 +14,12 @@ const Quiz = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getMCQs().then((data) => {
+    if (!quizConfig) {
+      navigate('/');
+      return;
+    }
+    const { topic, questionCount } = quizConfig;
+    getMCQs(topic, questionCount).then((data) => {
       setQuestions(data);
       setLoading(false);
     });
