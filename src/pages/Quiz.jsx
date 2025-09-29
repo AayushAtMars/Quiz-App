@@ -13,21 +13,24 @@ const Quiz = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Fetch questions on component mount
   useEffect(() => {
     if (!quizConfig) {
       navigate('/');
       return;
     }
     const { topic, questionCount } = quizConfig;
-    // Reset score and answers when starting a new quiz
+
     setScore(0);
     setAnswers([]);
+
     getMCQs(topic, questionCount).then((data) => {
       setQuestions(data);
       setLoading(false);
     });
   }, []);
 
+  // Timer effect
   useEffect(() => {
     if (!questions || questions.length === 0) return;
 
@@ -37,11 +40,8 @@ const Quiz = () => {
           clearInterval(interval);
           if (currentQ < questions.length) {
             setTimeout(() => {
-              if (currentQ === questions.length - 1) {
-                finishQuiz();
-              } else {
-                handleNext();
-              }
+              if (currentQ === questions.length - 1) finishQuiz();
+              else handleNext();
             }, 0);
           }
           return 60;
@@ -54,25 +54,22 @@ const Quiz = () => {
   }, [currentQ, questions]);
 
   const handleNext = () => {
-    // Compare the selected answer with the correct answer (case-insensitive)
-    const isCorrect = selected?.toLowerCase().trim() === questions[currentQ]?.answer.toLowerCase().trim();
+    const isCorrect =
+      selected?.toLowerCase().trim() === questions[currentQ]?.answer.toLowerCase().trim();
     setAnswers((prev) => [...prev, isCorrect ? 1 : 0]);
 
     setSelected(null);
     setTimer(60);
 
-    if (currentQ === questions.length - 1) {
-      finishQuiz();
-    } else {
-      setCurrentQ((prev) => prev + 1);
-    }
+    if (currentQ === questions.length - 1) finishQuiz();
+    else setCurrentQ((prev) => prev + 1);
   };
 
   const finishQuiz = () => {
     if (!questions || !questions[currentQ]) return;
 
-    // Compare the selected answer with the correct answer (case-insensitive)
-    const isCorrect = selected?.toLowerCase().trim() === questions[currentQ]?.answer.toLowerCase().trim();
+    const isCorrect =
+      selected?.toLowerCase().trim() === questions[currentQ]?.answer.toLowerCase().trim();
     const updatedAnswers = [...answers, isCorrect ? 1 : 0];
     setAnswers(updatedAnswers);
 
@@ -104,12 +101,12 @@ const Quiz = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -30 }}
         >
-          <div 
+          <div
             className="absolute top-0 left-0 h-1 bg-slate-600 transition-all rounded-xl"
-            style={{ 
+            style={{
               width: `${(timer / 60) * 100}%`,
-              transition: 'width 950ms cubic-bezier(0.4, 0, 0.2, 1)',
-              willChange: 'width'
+              transition: "width 950ms cubic-bezier(0.4, 0, 0.2, 1)",
+              willChange: "width",
             }}
           />
           <div className="mb-6">
@@ -127,9 +124,11 @@ const Quiz = () => {
               <button
                 key={i}
                 onClick={() => setSelected(opt)}
-                className={`w-full p-4 text-left rounded-lg transition-all duration-300 ${selected === opt
-                  ? "bg-slate-600 text-white"
-                  : "bg-slate-100 hover:bg-gray-200 text-gray-700"}`}
+                className={`w-full p-4 text-left rounded-lg transition-all duration-300 ${
+                  selected === opt
+                    ? "bg-slate-600 text-white"
+                    : "bg-slate-100 hover:bg-gray-200 text-gray-700"
+                }`}
               >
                 {opt}
               </button>
@@ -140,11 +139,8 @@ const Quiz = () => {
             <button
               disabled={!selected}
               onClick={() => {
-                if (currentQ === questions.length - 1) {
-                  finishQuiz();
-                } else {
-                  handleNext();
-                }
+                if (currentQ === questions.length - 1) finishQuiz();
+                else handleNext();
               }}
               className="bg-slate-600 hover:bg-slate-700 text-white px-6 py-2 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
             >
